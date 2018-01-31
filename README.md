@@ -23,3 +23,28 @@ for (let x = 1; x < 3; x++) {
   }
 }
 ```
+
+```javascript
+const Poll = require('survaid')
+
+const poll = new Poll({
+  label: 'What would you like to do tomorrow?',
+  startTime: '01/30/2018-08:00UTC',
+  endTime: '01/31/2018-08:00UTC',
+  allowMultiple: false,
+  anyInput: true
+})
+
+async function doStuff () {
+  await poll.vote('Go to the beach!', 1)
+  await poll.vote('Go to the park!', 10)
+  await poll.vote('Go to the park!', 11)
+  await poll.vote('Go to the movies!', 100)
+  await poll.vote('Go to the park!', 101)
+  await poll.vote('Go to the beach!', 1)
+
+  return Promise.resolve(poll.values)
+}
+
+doStuff().then(res => console.log(res)).catch(err => console.error(err))
+```
