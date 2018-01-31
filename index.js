@@ -80,7 +80,7 @@ class Poll {
       output += `\n${key} has ${val} votes.`
     })
 
-    return Promise.resolve(output)
+    return output
   }
 
   /**

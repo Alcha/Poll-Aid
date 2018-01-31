@@ -5,14 +5,14 @@ Survaid is a tool for managing polls/surveys without any backend for persistence
 ## Sample Uses
 
 ```javascript
-const Poll = require('../Survaid')
+const Poll = require('survaid')
 
 const poll = new Poll({
   label: 'Who is the greatest gamer of all time?',
   allowMultiple: true,
   anyInput: true,
-  startTime: '01/30/2018-06:00',
-  endTime: '01/31/2018-06:00'
+  startTime: '01/30/2018-06:00UTC',
+  endTime: '01/31/2018-06:00UTC'
 })
 
 for (let x = 1; x < 3; x++) {
@@ -25,7 +25,7 @@ for (let x = 1; x < 3; x++) {
 ```
 
 ```javascript
-const Poll = require('survaid')
+const Poll = require('../Survaid')
 
 const poll = new Poll({
   label: 'What would you like to do tomorrow?',
@@ -35,16 +35,14 @@ const poll = new Poll({
   anyInput: true
 })
 
-async function doStuff () {
-  await poll.vote('Go to the beach!', 1)
-  await poll.vote('Go to the park!', 10)
-  await poll.vote('Go to the park!', 11)
-  await poll.vote('Go to the movies!', 100)
-  await poll.vote('Go to the park!', 101)
-  await poll.vote('Go to the beach!', 1)
+Promise.all([
+  poll.vote('Go to the beach!', 1),
+  poll.vote('Go to the park!', 10),
+  poll.vote('Go to the park!', 11),
+  poll.vote('Go to the movies!', 100),
+  poll.vote('Go to the park!', 101)
+]).then(res => {
+  console.log(poll.results())
+}).catch(err => console.error(err))
 
-  return Promise.resolve(poll.values)
-}
-
-doStuff().then(res => console.log(res)).catch(err => console.error(err))
 ```
