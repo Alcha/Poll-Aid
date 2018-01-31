@@ -73,14 +73,15 @@ class Poll {
     }
   }
 
-  // Soon...
-  /* results () {
-    let output = ''
+  results () {
+    let output = 'Current voting results:\n'
 
     this.values.forEach((val, key, map) => {
-
+      output += `\n${key} has ${val} votes.`
     })
-  } */
+
+    return Promise.resolve(output)
+  }
 
   /**
    * Not intended to be called by users of this module unless they know what they're doing.
