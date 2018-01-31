@@ -2,13 +2,14 @@
 
 Survaid is a tool for managing polls/surveys without any backend for persistence as of yet.
 
-## Sample Use
+## Sample Uses
 
 ```javascript
 const Poll = require('../Survaid')
 
 const poll = new Poll({
   label: 'Who is the greatest gamer of all time?',
+  allowMultiple: true,
   anyInput: true,
   startTime: '01/30/2018-06:00',
   endTime: '01/31/2018-06:00'
