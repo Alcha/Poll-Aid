@@ -73,11 +73,14 @@ class Poll {
     }
   }
 
+  /**
+   * Formats the current voting results into a prettier string with line feeds and everything.
+   */
   results () {
     let output = 'Current voting results:\n'
 
     this.values.forEach((val, key, map) => {
-      output += `\n${key} has ${val} votes.`
+      output += `\n${key} has ${val} vote(s).`
     })
 
     return output

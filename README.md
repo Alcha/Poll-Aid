@@ -4,6 +4,8 @@ Survaid is a tool for managing polls/surveys without any backend for persistence
 
 ## Sample Uses
 
+### Use 1
+
 ```javascript
 const Poll = require('survaid')
 
@@ -18,11 +20,13 @@ const poll = new Poll({
 for (let x = 1; x < 3; x++) {
   for (let y = 0; y < (x * 5); y++) {
     poll.vote(`Gamer ${x === 1 ? 'A' : 'B'}`).then(status => {
-      if (x === 2 && y === ((x * 5) - 1)) console.log(poll.values)
+      if (x === 2 && y === ((x * 5) - 1)) console.log(poll.values) // Map { 'Gamer A' => 5, 'Gamer B' => 10 }
     }).catch(err => console.error(err))
   }
 }
 ```
+
+### Use 2
 
 ```javascript
 const Poll = require('../Survaid')
@@ -44,5 +48,14 @@ Promise.all([
 ]).then(res => {
   console.log(poll.results())
 }).catch(err => console.error(err))
+```
 
+The `poll.results()` method used in Use 2 above, would output something like so:
+
+```txt
+Current voting results:
+
+Go to the beach! has 1 vote(s).
+Go to the park! has 3 vote(s).
+Go to the movies! has 1 vote(s).
 ```
