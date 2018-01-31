@@ -1,17 +1,24 @@
 # Survaid
 
-Survaid is a tool for managing polls/surveys with a MongoDB backend for persistence of the given
-poll data.
+Survaid is a tool for managing polls/surveys without any backend for persistence as of yet.
 
 ## Sample Use
 
-While the module isn't yet functional, a sample use case would be something like so:
-
 ```javascript
-const poll = new Poll({label: "Do you like icecream", values: ["yes", "no"], allowMultiple: false});
+const Poll = require('../Survaid')
 
-poll.vote('yes').then(results => {
-  console.log(`Yes votes = ${results.yes}`) // 1
-  console.log(`No votes = ${results.no}`)   // 0
+const poll = new Poll({
+  label: 'Who is the greatest gamer of all time?',
+  anyInput: true,
+  startTime: '01/30/2018-06:00',
+  endTime: '01/31/2018-06:00'
 })
+
+for (let x = 1; x < 3; x++) {
+  for (let y = 0; y < (x * 5); y++) {
+    poll.vote(`Gamer ${x === 1 ? 'A' : 'B'}`).then(status => {
+      if (x === 2 && y === ((x * 5) - 1)) console.log(poll.values)
+    }).catch(err => console.error(err))
+  }
+}
 ```
