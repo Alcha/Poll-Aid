@@ -30,8 +30,6 @@
   },
   "homepage": "https://github.com/Alcha/Poll-Aid#readme",
   "dependencies": {
-    "mongoose": "^4.13.9",
-    "redis": "^2.8.0",
     "simpleflakes": "1.3.0"
   }
 }
