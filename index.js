@@ -55,20 +55,22 @@ class Poll {
    * count increased and resulting value returned.
    *
    * @param {string} choice A string representing the choice you wish to vote for.
-   * @param {string} [voterId] An optional unique string representing a voter.
+   * @param {string} voterId A unique string representing a voter.
+   * @param {boolean} [rescind] An optional flag to remove a vote in the event a user changes it.
+   *
    * @returns {Promise<number>}
    */
-  async vote (choice, voterId = 0) {
+  async vote (choice, voterId, rescind = false) {
     // Verify if more than one vote is allowed
     if (this.allowMultiple) {
-      return this.handleChoice(choice)
+      return this.handleChoice(choice, rescind)
     } else {
       // Check if the user has already voted
       if (this.voters.get(voterId) === true) return Promise.reject(ALREADY_VOTED)
       else {
         // Prevent the user from voting again
         this.voters.set(voterId, true)
-        return Promise.resolve(this.handleChoice(choice))
+        return this.handleChoice(choice, rescind)
       }
     }
   }
@@ -90,10 +92,30 @@ class Poll {
    * Not intended to be called by users of this module unless they know what they're doing.
    *
    * @param {string} choice
+   * @param {boolean} rescind
+   *
+   * @returns {Promise<number>} Resulting vote count
    *
    * @private
    */
-  handleChoice (choice) {
+  handleChoice (choice, rescind) {
+    return new Promise((resolve, reject) => {
+      if (rescind) resolve(this.removeVote(choice))
+      else resolve(this.addVote(choice))
+    })
+  }
+
+  /**
+   * Used to increase the vote count for a specified voting choice. Not intended to be called by
+   * users of the module.
+   *
+   * @param {string} choice The choice you wish to add a vote to.
+   *
+   * @returns {Promise<number>} Resulting vote count
+   *
+   * @private
+   */
+  addVote (choice) {
     return new Promise((resolve, reject) => {
       if (this.anyInput) {
         let currVal = this.values.get(choice)
@@ -111,6 +133,38 @@ class Poll {
         if (currVal === undefined) reject(UNAVAILABLE_CHOICE)
         else {
           this.values.set(choice, currVal + 1)
+          resolve(this.values.get(choice))
+        }
+      }
+    })
+  }
+
+  /**
+   * Used to decrease the vote count for a specified voting choice. Not intended to be called by
+   * users of the module.
+   *
+   * @param {string} choice The choice you wish to add a vote to.
+   *
+   * @returns {Promise<number>} Resulting vote count
+   *
+   * @private
+   */
+  removeVote (choice) {
+    return new Promise((resolve, reject) => {
+      if (this.anyInput) {
+        let currVal = this.values.get(choice)
+
+        if (currVal !== undefined) {
+          this.values.set(choice, currVal - 1)
+        }
+
+        resolve(this.values.get(choice))
+      } else {
+        let currVal = this.values.get(choice)
+
+        if (currVal === undefined) reject(UNAVAILABLE_CHOICE)
+        else {
+          this.values.set(choice, currVal - 1)
           resolve(this.values.get(choice))
         }
       }
