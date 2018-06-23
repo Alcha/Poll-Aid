@@ -1,5 +1,7 @@
 # Survaid
 
+[![Greenkeeper badge](https://badges.greenkeeper.io/Alcha/Survaid.svg)](https://greenkeeper.io/)
+
 Survaid is a tool for managing polls/surveys without any backend for persistence as of yet.
 
 ## Sample Uses
